@@ -10,7 +10,7 @@ import re
 from urlparse import urlparse
 import sys
 
-from config_local import *
+from config import *
 from reminder import *
 #from config import *
 
