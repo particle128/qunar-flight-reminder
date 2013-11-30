@@ -8,29 +8,12 @@ import time
 import datetime
 import re
 from urlparse import urlparse
-from email.mime.text import MIMEText
-from email.charset import Charset
-import smtplib
 import sys
 
 from config_local import *
+from reminder import *
 #from config import *
 
-
-def sendEmail(text):
-	msg=MIMEText(text,_charset='utf-8') 
-	msg['From']=FROM_ADDR
-	msg['To']=TO_ADDR
-	msg['Subject']=u'Qunar Notice'
-	try:
-		smtp=smtplib.SMTP(MAIL_HOST) 
-		smtp.login(MAIL_USER,MAIL_PWD)
-		smtp.sendmail(FROM_ADDR,TO_ADDR,msg.as_string())
-		print 'sending mail success.'
-	except Exception as e:
-		print e
-	finally:
-		smtp.quit()
 
 def check(driver):
 	"read the configuration file (config.py) once a time"

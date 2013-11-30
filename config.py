@@ -20,7 +20,7 @@ DEMANDS= [
 
 # time interval in seconds between two checkings
 # Don't use a small interval such as 60*5(5mins),because if you frequently check the website, verification code page may appear.
-INTERVAL=60*20
+INTERVAL=60*30
 
 # mail sender
 FROM_ADDR='[username]@126.com'
