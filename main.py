@@ -3,6 +3,7 @@
 
 import selenium
 from selenium import webdriver 
+#from selenium.webdriver.common.proxy import *
 import time
 import datetime
 import re
@@ -10,6 +11,7 @@ from urlparse import urlparse
 from email.mime.text import MIMEText
 from email.charset import Charset
 import smtplib
+import sys
 
 from config_local import *
 #from config import *
@@ -65,8 +67,8 @@ def check(driver):
 					if threshold==0:
 						need_validation=True
 						break
-					print 'wait 3s '
-					time.sleep(3)
+					print 'wait 5s '
+					time.sleep(5)
 				else:
 					break
 
@@ -77,7 +79,7 @@ def check(driver):
 				continue
 			# validation page appears because of too frequent requests
 			if need_validation:
-				print 'too frequent,need validation'
+				print 'too frequent,need varification code'
 				return
 
 			first=True
@@ -88,17 +90,14 @@ def check(driver):
 				for block in driver.find_element_by_class_name('prc').find_elements_by_tag_name('b'):
 					if first:
 						prc=list(block.text)
-						print prc
 						# whole length of the price
 						len=int(pos_pattern.search(str(block.get_attribute('style'))).group(1))
 						first=False
 					else:
 						# position of the number
 						pos=int(pos_pattern.search(str(block.get_attribute('style'))).group(1))
-						print block.text
 						prc[len-pos]=block.text
 				price=int(''.join(prc))
-				print price
 				if price<=demand['price']:
 					infoText+="%s: %s to %s 's price is %d\r\n" %(dd.isoformat(),demand['src'],demand['dst'],price)
 					print infoText
@@ -108,13 +107,32 @@ def check(driver):
 					
 			# the next day 
 			dd+=one_day
+		# sleep for 1mins to avoid verification code page
+		time.sleep(60)
 	if infoText:
 		sendEmail(infoText)
 
 if __name__=='__main__':
 
+# attempt to use the http proxy, but fails.
+
+#	myProxy = "217.169.209.2:6666"
+#	proxy = Proxy({
+#		'proxyType': ProxyType.MANUAL,
+#		'httpProxy': myProxy,
+#		'ftpProxy': myProxy,
+#		'sslProxy': myProxy,
+#		'noProxy': '' # set this value as desired
+#		})
+	#driver = webdriver.Firefox(proxy=proxy)
+
 	driver=webdriver.Chrome()
+	#sys.stdout=open('output','w')
+	print 'here we go'
 	while True:
-		# every 5 min
+		# every 0.5h
+		print 'begin checking...'
 		check(driver)
-		time.sleep(60)
+		print 'end checking...'
+		sys.stdout.flush() # flush the output
+		time.sleep(INTERVAL)

@@ -1,2 +1,4 @@
 *.pyc
 *local*
+test.py
+output

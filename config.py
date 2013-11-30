@@ -8,15 +8,19 @@ DEMANDS= [
 	{'src':'大连',
 	'dst':'济南',
 	'date_start':'2014-01-08',
-	'date_end':'2014-01-12',
+	'date_end':'2014-01-10',
 	'price':250},
 
 	{'src':'大连',
 	'dst':'济宁',
 	'date_start':'2014-01-08',
-	'date_end':'2014-01-12',
+	'date_end':'2014-01-10',
 	'price':350},
 ]
+
+# time interval in seconds between two checkings
+# Don't use a small interval such as 60*5(5mins),because if you frequently check the website, verification code page may appear.
+INTERVAL=60*20
 
 # mail sender
 FROM_ADDR='[username]@126.com'
