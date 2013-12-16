@@ -10,9 +10,9 @@ import re
 from urlparse import urlparse
 import sys
 
-from config import *
-from reminder import *
+from config_local import *
 #from config import *
+from reminder import *
 
 
 def check(driver):
@@ -39,6 +39,7 @@ def check(driver):
 			no_result=False
 			need_validation=False
 			threshold=10
+			time.sleep(10)
 			while True:
 				try:
 					driver.find_element_by_class_name('prc').find_elements_by_tag_name('b')
@@ -50,8 +51,8 @@ def check(driver):
 					if threshold==0:
 						need_validation=True
 						break
-					print 'wait 5s '
-					time.sleep(5)
+					print 'wait 10s '
+					time.sleep(10)
 				else:
 					break
 
@@ -83,17 +84,18 @@ def check(driver):
 				price=int(''.join(prc))
 				if price<=demand['price']:
 					infoText+="%s: %s to %s 's price is %d\r\n" %(dd.isoformat(),demand['src'],demand['dst'],price)
+					# if important information arrives, send email immediately
+					sendEmail(infoText)
 					print infoText
+					infoText=""
 			# if some exception occurs,let it go
 			except Exception as e:
 				print e
 					
 			# the next day 
 			dd+=one_day
-		# sleep for 1mins to avoid verification code page
-		time.sleep(60)
-	if infoText:
-		sendEmail(infoText)
+			# wait 30s
+			time.sleep(30)
 
 if __name__=='__main__':
 

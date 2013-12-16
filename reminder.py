@@ -4,6 +4,8 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.charset import Charset
+from config_local import *
+#from config import *
 
 def sendEmail(text):
 	msg=MIMEText(text,_charset='utf-8') 
